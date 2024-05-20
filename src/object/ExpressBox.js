@@ -1,11 +1,12 @@
-import Box from './Box';
-import {BoxGeometry, Mesh, MeshLambertMaterial, TextureLoader} from "three";
-import {recreateCubeUV, LEFT, TOP, BEHIND} from '../util/MapUtil';
-import express from '../res/express.png';
+import Box from "./Box";
+import { BoxGeometry, Mesh, MeshLambertMaterial, TextureLoader } from "three";
+import { recreateCubeUV, LEFT, TOP, BEHIND } from "../util/MapUtil";
+// import express from '../res/express.png';
+import { express } from "../res/dataUrl";
 
 export default class ExpressBox extends Box {
   constructor(prev) {
-    super(prev)
+    super(prev);
   }
 
   initBox() {
@@ -14,7 +15,7 @@ export default class ExpressBox extends Box {
       map: new TextureLoader().load(express),
     });
 
-    geometry.translate(0, this.height/2, 0);
+    geometry.translate(0, this.height / 2, 0);
 
     // 裁剪贴图
     recreateCubeUV(428, 428, geometry, LEFT, 0, 0, 280, 148);
@@ -24,5 +25,4 @@ export default class ExpressBox extends Box {
     // 生成网格
     this.mesh = new Mesh(geometry, material);
   }
-
 }

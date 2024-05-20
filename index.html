@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jump</title>
+
+    <script>
+      // 请将以下代码转换为JavaScript代码，并确保代码能够正常运行。
+      function appCallMethod(key, value) {
+        window[key] = value;
+        console.log(`${key} = ${value}`);
+      }
+      function callAppMethod(method, data = {}) {
+        try {
+          App.postMessage(
+            JSON.stringify({
+              method,
+              data,
+            })
+          );
+        } catch (error) {}
+      }
+      window.callAppMethod = callAppMethod;
+      window.appCallMethod = appCallMethod;
+    </script>
+  </head>
+  <body></body>
+</html>

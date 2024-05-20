@@ -1,11 +1,10 @@
-import Stage from './Stage';
-import BoxGroup from './BoxGroup';
-import LittleMan from './LittleMan';
-import {setFrameAction} from '../util/TweenUtil';
+import Stage from "./Stage";
+import BoxGroup from "./BoxGroup";
+import LittleMan from "./LittleMan";
+import { setFrameAction } from "../util/TweenUtil";
 
 export default class JumpGame {
-
-  constructor () {
+  constructor() {
     // 舞台
     this.stage = null;
     // 盒子组
@@ -48,12 +47,12 @@ export default class JumpGame {
 
     // 更新盒子和小人的位置
     this.boxGroup.updatePosition({
-      duration: 0
+      duration: 0,
     });
   }
 
   start() {
     this.stage.render();
+    window.callAppMethod("start", {});
   }
-
 }

@@ -5,8 +5,8 @@ import {
   Geometry,
   Group,
   Mesh,
-} from 'three'
-import TWEEN from '@tweenjs/tween.js';
+} from "three";
+import TWEEN from "@tweenjs/tween.js";
 import {
   LITTLE_MAN_WIDTH,
   LITTLE_MAN_HEIGHT,
@@ -14,20 +14,19 @@ import {
   JUMP_TIME,
   HIGH_JUMP,
   STORAGE_TIME,
-  ENABLE_AUTO_JUMP
+  ENABLE_AUTO_JUMP,
 } from "../config/constant";
-import {animateFrame} from '../util/TweenUtil';
-import Box from './Box';
-import Particle from './Particle';
-import Tail from './Tail';
+import { animateFrame } from "../util/TweenUtil";
+import Box from "./Box";
+import Particle from "./Particle";
+import Tail from "./Tail";
 
 class LittleMan {
-
-  constructor (stage, boxGroup) {
+  constructor(stage, boxGroup) {
     this.stage = stage;
     this.boxGroup = boxGroup;
     // 定义小人的材质，方便复用
-    this.materail = new MeshLambertMaterial({color: LITTLE_MAN_COLOR});
+    this.materail = new MeshLambertMaterial({ color: LITTLE_MAN_COLOR });
     // 头部
     this.head = null;
     // 躯干
@@ -61,7 +60,7 @@ class LittleMan {
     this.init();
   }
 
-  init () {
+  init() {
     // 创建头部
     this.initHead();
     // 创建躯干
@@ -79,7 +78,7 @@ class LittleMan {
   // 头部
   initHead() {
     // 球缓冲几何体
-    const headGeometry = new SphereGeometry(LITTLE_MAN_WIDTH/2, 40, 40);
+    const headGeometry = new SphereGeometry(LITTLE_MAN_WIDTH / 2, 40, 40);
 
     this.head = new Mesh(headGeometry, this.materail);
     // 小人也能投射阴影
@@ -96,28 +95,28 @@ class LittleMan {
 
     this.trunkHeight = trunkHeight;
     // 上方球体
-    const trunkTopGeometry = new SphereGeometry(LITTLE_MAN_WIDTH/2, 40, 40);
+    const trunkTopGeometry = new SphereGeometry(LITTLE_MAN_WIDTH / 2, 40, 40);
     trunkTopGeometry.translate(0, trunkHeight, 0);
 
     // 中间圆柱，和上方球体相切
     const trunkCenterGeometry = new CylinderGeometry(
-      LITTLE_MAN_WIDTH/2,
-      LITTLE_MAN_WIDTH/2 * .8,
-      trunkHeight/4,
+      LITTLE_MAN_WIDTH / 2,
+      (LITTLE_MAN_WIDTH / 2) * 0.8,
+      trunkHeight / 4,
       40
     );
     // 向上移动到和球体相切
-    trunkCenterGeometry.translate(0, trunkHeight / 8 * 7, 0);
+    trunkCenterGeometry.translate(0, (trunkHeight / 8) * 7, 0);
 
     // 下方圆柱
     const trunkBottomGeometry = new CylinderGeometry(
-      LITTLE_MAN_WIDTH/2 * .8,
-      LITTLE_MAN_WIDTH/2 * 1.3,
-      trunkHeight/4 * 3,
+      (LITTLE_MAN_WIDTH / 2) * 0.8,
+      (LITTLE_MAN_WIDTH / 2) * 1.3,
+      (trunkHeight / 4) * 3,
       40
     );
     // 向上移动到和上方圆柱相切
-    trunkBottomGeometry.translate(0, 3 /8 * trunkHeight, 0);
+    trunkBottomGeometry.translate(0, (3 / 8) * trunkHeight, 0);
 
     // 三者合成躯干
     const trunkGeometry = new Geometry();
@@ -135,11 +134,11 @@ class LittleMan {
   initBody() {
     // bodyRotate 将旋转中心点移动到物体的中间部分
     this.bodyRotate = new Group();
-    this.bodyRotate.translateY(LITTLE_MAN_HEIGHT/2);
+    this.bodyRotate.translateY(LITTLE_MAN_HEIGHT / 2);
     this.bodyRotate.add(this.head);
-    this.head.translateY(-LITTLE_MAN_HEIGHT/2);
+    this.head.translateY(-LITTLE_MAN_HEIGHT / 2);
     this.bodyRotate.add(this.trunk);
-    this.trunk.translateY(-LITTLE_MAN_HEIGHT/2);
+    this.trunk.translateY(-LITTLE_MAN_HEIGHT / 2);
 
     // 注意，body 的 position 还是在坐标原点，也就是小人的脚下
     this.body = new Group();
@@ -159,60 +158,72 @@ class LittleMan {
     this.tail = new Tail(this.stage.scene, this.bodyRotate);
   }
 
-  initEventListener () {
+  initEventListener() {
     const container = this.stage.renderer.domElement;
-    const isMobile = 'ontouchstart' in document;
-    const mousedownName = isMobile ? 'touchstart' : 'mousedown';
-    const mouseupName = isMobile ? 'touchend' : 'mouseup';
+    const isMobile = "ontouchstart" in document;
+    const mousedownName = isMobile ? "touchstart" : "mousedown";
+    const mouseupName = isMobile ? "touchend" : "mouseup";
 
     // 监听按下事件
-    container.addEventListener(mousedownName, (event) => {
-      event.preventDefault();
-      // 开始蓄力
-      if(this.state === LittleMan.STATE.init) {
-        this.state = LittleMan.STATE.storage;
-        // 粒子聚集
-        this.particle.gather(this.body);
-        // 形变
-        this.storage()
-      }
-    }, false);
+    container.addEventListener(
+      mousedownName,
+      (event) => {
+        event.preventDefault();
+        window.callAppMethod(mousedownName, {
+          status: this.state === LittleMan.STATE.init,
+        });
+        // 开始蓄力
+        if (this.state === LittleMan.STATE.init) {
+          this.state = LittleMan.STATE.storage;
+          // 粒子聚集
+          this.particle.gather(this.body);
+          // 形变
+          this.storage();
+        }
+      },
+      false
+    );
 
     // 监听松开事件
-    container.addEventListener(mouseupName, (event) => {
-      event.preventDefault();
+    container.addEventListener(
+      mouseupName,
+      (event) => {
+        event.preventDefault();
+        window.callAppMethod(mouseupName, {
+          status: this.state === LittleMan.STATE.storage,
+        });
+        if (this.state === LittleMan.STATE.storage) {
+          this.state = LittleMan.STATE.jumping;
+          // 停止粒子聚集
+          this.particle.stopGather();
 
-      if(this.state === LittleMan.STATE.storage) {
-        this.state = LittleMan.STATE.jumping;
-        // 停止粒子聚集
-        this.particle.stopGather();
-
-        // 跳跃
-        this.jump();
-      }
-    }, false)
+          // 跳跃
+          this.jump();
+        }
+      },
+      false
+    );
   }
 
   // 蓄力
   storage() {
     const tween = new TWEEN.Tween({
-      headYPosition: LITTLE_MAN_HEIGHT/2,
+      headYPosition: LITTLE_MAN_HEIGHT / 2,
       trunkScaleXZ: 1,
       trunkScaleY: 1,
-      boxScaleY:1
-    }).to({
-        headYPosition: LITTLE_MAN_HEIGHT/2 - this.trunkHeight * 0.4,
-        trunkScaleXZ: 1.3,
-        trunkScaleY: 0.6,
-        boxScaleY:0.6
-    }, STORAGE_TIME)
+      boxScaleY: 1,
+    })
+      .to(
+        {
+          headYPosition: LITTLE_MAN_HEIGHT / 2 - this.trunkHeight * 0.4,
+          trunkScaleXZ: 1.3,
+          trunkScaleY: 0.6,
+          boxScaleY: 0.6,
+        },
+        STORAGE_TIME
+      )
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({
-        headYPosition,
-        trunkScaleXZ,
-        trunkScaleY,
-        boxScaleY,
-      })=>{
+      .onUpdate(({ headYPosition, trunkScaleXZ, trunkScaleY, boxScaleY }) => {
         if (this.state !== LittleMan.STATE.storage) {
           tween.stop();
         }
@@ -290,19 +301,24 @@ class LittleMan {
 
       // 移动位置
       // duration 的大小要小于小人的滞空时间
-      this.boxGroup.updatePosition({duration: 300});
+      this.boxGroup.updatePosition({ duration: 300 });
+      window.callAppMethod("jumpSuccess", {});
     }
 
     // 跳到了空地（游戏结束）
     if (state === LittleMan.STATE.outRange) {
       this.landToGround();
+      window.callAppMethod("gameOver", {});
     }
 
     // 前向掉落,后向掉落（游戏结束）
-    if (state === LittleMan.STATE.current_edge_front ||
-        state === LittleMan.STATE.next_edge_front ||
-        state === LittleMan.STATE.next_edge_back) {
+    if (
+      state === LittleMan.STATE.current_edge_front ||
+      state === LittleMan.STATE.next_edge_front ||
+      state === LittleMan.STATE.next_edge_back
+    ) {
       this.leaning(state);
+      window.callAppMethod("gameOver", {});
     }
   }
 
@@ -318,19 +334,23 @@ class LittleMan {
     let tan, cos, sin;
 
     // 计算 tan
-    if (this.box.direction === 'z') {
-      tan = this.body.position.x/(this.box.next.position.z - this.body.position.z);
+    if (this.box.direction === "z") {
+      tan =
+        this.body.position.x /
+        (this.box.next.position.z - this.body.position.z);
     } else {
-      tan = this.body.position.z/(this.body.position.x - this.box.next.position.x);
+      tan =
+        this.body.position.z /
+        (this.body.position.x - this.box.next.position.x);
     }
 
     // 通过 tan 计算 sin 和 cos
-    sin = tan/Math.sqrt(1 + tan*tan);
-    cos = Math.sqrt(1 - sin*sin);
+    sin = tan / Math.sqrt(1 + tan * tan);
+    cos = Math.sqrt(1 - sin * sin);
 
     if (ENABLE_AUTO_JUMP) {
       // 测试用，每次都跳到中央
-      distance = this.box.distance + this.box.size/2 + this.box.next.size/2;
+      distance = this.box.distance + this.box.size / 2 + this.box.next.size / 2;
     }
 
     // 定义目的地坐标
@@ -338,9 +358,9 @@ class LittleMan {
     let targetX = 0;
 
     // 使用 finalX 和 finalZ 是由于场景移动的影响，x 和 z 可能不准确
-    const {finalX:x, finalZ:z} = this.body;
+    const { finalX: x, finalZ: z } = this.body;
 
-    if (this.box.direction === 'z') {
+    if (this.box.direction === "z") {
       targetZ = z - distance * cos;
       targetX = x + distance * sin;
     } else {
@@ -349,11 +369,10 @@ class LittleMan {
     }
 
     // 匀速运动
-    new TWEEN.Tween({x:this.body.position.x, z:this.body.position.z})
-      .to({x:targetX, z:targetZ
-      }, JUMP_TIME)
+    new TWEEN.Tween({ x: this.body.position.x, z: this.body.position.z })
+      .to({ x: targetX, z: targetZ }, JUMP_TIME)
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({x, z})=>{
+      .onUpdate(({ x, z }) => {
         this.body.position.setX(x);
         this.body.position.setZ(z);
       })
@@ -366,7 +385,7 @@ class LittleMan {
   }
 
   moveInY(cb) {
-    const {y} = this.body.position;
+    const { y } = this.body.position;
 
     // y 方向向上的时间
     const upTime = JUMP_TIME * 0.5;
@@ -377,22 +396,22 @@ class LittleMan {
     const height = Box.defaultHeight + HIGH_JUMP;
 
     // 上升阶段，Quartic 表示平方
-    const up = new TWEEN.Tween({y})
-      .to({y: height}, upTime)
+    const up = new TWEEN.Tween({ y })
+      .to({ y: height }, upTime)
       .easing(TWEEN.Easing.Quartic.Out)
-      .onUpdate(({y})=>{
+      .onUpdate(({ y }) => {
         this.body.position.setY(y);
       });
 
     // 下降阶段
-    const down = new TWEEN.Tween({y: height})
-      .to({y: Box.defaultHeight}, downTime)
+    const down = new TWEEN.Tween({ y: height })
+      .to({ y: Box.defaultHeight }, downTime)
       .easing(TWEEN.Easing.Quartic.In)
       .onComplete(() => {
         // 执行回调
         cb && cb();
       })
-      .onUpdate(({y})=>{
+      .onUpdate(({ y }) => {
         this.body.position.setY(y);
       });
 
@@ -404,26 +423,27 @@ class LittleMan {
 
   // 前空翻
   flip() {
-    const {direction} = this.box;
+    const { direction } = this.box;
 
     let lastAngle = 0;
 
     // 根据时间旋转不同的角度
-    new TWEEN.Tween({t: 0})
-      .to({t: JUMP_TIME }, JUMP_TIME)
+    new TWEEN.Tween({ t: 0 })
+      .to({ t: JUMP_TIME }, JUMP_TIME)
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({t})=>{
+      .onUpdate(({ t }) => {
         // 更新位置
-        const angle = 2 * Math.PI * t / JUMP_TIME;
+        const angle = (2 * Math.PI * t) / JUMP_TIME;
 
-        if (direction === 'x') {
+        if (direction === "x") {
           this.bodyRotate.rotateZ(lastAngle - angle);
         } else {
           this.bodyRotate.rotateX(lastAngle - angle);
         }
 
         lastAngle = angle;
-      }).start();
+      })
+      .start();
 
     animateFrame();
   }
@@ -432,10 +452,10 @@ class LittleMan {
   trailing() {
     let lastTime = 0;
 
-    new TWEEN.Tween({t: 0})
-      .to({t: JUMP_TIME }, JUMP_TIME)
+    new TWEEN.Tween({ t: 0 })
+      .to({ t: JUMP_TIME }, JUMP_TIME)
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({t})=>{
+      .onUpdate(({ t }) => {
         // 更新位置
         this.tail.showTail(t - lastTime);
         lastTime = t;
@@ -454,20 +474,19 @@ class LittleMan {
       headYPosition: this.headYPosition,
       trunkScaleXZ: this.trunkScaleXZ,
       trunkScaleY: this.trunkScaleY,
-      boxScaleY:this.boxScaleY
-    }).to({
-      headYPosition: LITTLE_MAN_HEIGHT/2,
-      trunkScaleXZ: 1,
-      trunkScaleY: 1,
-      boxScaleY:1
-    }, JUMP_TIME/3)
+      boxScaleY: this.boxScaleY,
+    })
+      .to(
+        {
+          headYPosition: LITTLE_MAN_HEIGHT / 2,
+          trunkScaleXZ: 1,
+          trunkScaleY: 1,
+          boxScaleY: 1,
+        },
+        JUMP_TIME / 3
+      )
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({
-                   headYPosition,
-                   trunkScaleXZ,
-                   trunkScaleY,
-                   boxScaleY,
-                 })=>{
+      .onUpdate(({ headYPosition, trunkScaleXZ, trunkScaleY, boxScaleY }) => {
         this.box.scaleY(boxScaleY);
         this.trunk.scale.set(trunkScaleXZ, trunkScaleY, trunkScaleXZ);
         // 回弹的时候不要设置 body 的 Y 的值，这个值会在跳跃过程中变化
@@ -481,17 +500,17 @@ class LittleMan {
 
   // 计算跳跃后的状态
   calculateState(jumpDistance) {
-    const {direction, size, next, position, distance} = this.box;
-    const {size: nextSize} = next;
-    const {x, z} = this.body.position;
+    const { direction, size, next, position, distance } = this.box;
+    const { size: nextSize } = next;
+    const { x, z } = this.body.position;
 
     // 当前盒子的边缘距离
     let currentEdge;
 
-    if (direction === 'x') {
-      currentEdge  = position.x + size/2 - x;
+    if (direction === "x") {
+      currentEdge = position.x + size / 2 - x;
     } else {
-      currentEdge  = z - position.z + size/2;
+      currentEdge = z - position.z + size / 2;
     }
 
     // 下一个盒子近点和远点距离
@@ -504,12 +523,12 @@ class LittleMan {
     }
 
     // 边缘位置，前向掉落
-    if (jumpDistance < currentEdge + LITTLE_MAN_WIDTH/2) {
+    if (jumpDistance < currentEdge + LITTLE_MAN_WIDTH / 2) {
       return LittleMan.STATE.current_edge_front;
     }
 
     // 两个盒子之间
-    if (jumpDistance < nextNearEdge - LITTLE_MAN_WIDTH/2) {
+    if (jumpDistance < nextNearEdge - LITTLE_MAN_WIDTH / 2) {
       return LittleMan.STATE.outRange;
     }
 
@@ -524,7 +543,7 @@ class LittleMan {
     }
 
     // 边缘位置，前向掉落
-    if (jumpDistance < nextFarEdge + LITTLE_MAN_WIDTH/2) {
+    if (jumpDistance < nextFarEdge + LITTLE_MAN_WIDTH / 2) {
       return LittleMan.STATE.next_edge_front;
     }
 
@@ -536,11 +555,15 @@ class LittleMan {
   landToGround() {
     new TWEEN.Tween({
       y: Box.defaultHeight,
-    }).to({
-      y: 0
-    }, JUMP_TIME * 2)
+    })
+      .to(
+        {
+          y: 0,
+        },
+        JUMP_TIME * 2
+      )
       .easing(TWEEN.Easing.Quintic.Out)
-      .onUpdate(({ y })=>{
+      .onUpdate(({ y }) => {
         this.body.position.setY(y);
       })
       .start();
@@ -550,8 +573,13 @@ class LittleMan {
 
   // 倾倒动画
   leaning(state) {
-    const {direction, position:currentPosition, distance, size:currentSize} = this.box;
-    const {position:nextPosition, size:nextSize} = this.box.next;
+    const {
+      direction,
+      position: currentPosition,
+      distance,
+      size: currentSize,
+    } = this.box;
+    const { position: nextPosition, size: nextSize } = this.box.next;
     // 计算倾倒物体和下一个物体之间的距离，判断是否发生碰撞
     let distanceBetweenBox = distance;
 
@@ -564,12 +592,12 @@ class LittleMan {
     const rotateTime = JUMP_TIME * 2;
     let lastAngle = 0;
 
-    const rotate = new TWEEN.Tween({t: 0})
-      .to({t: rotateTime }, rotateTime)
+    const rotate = new TWEEN.Tween({ t: 0 })
+      .to({ t: rotateTime }, rotateTime)
       .easing(TWEEN.Easing.Linear.None)
-      .onUpdate(({t})=>{
+      .onUpdate(({ t }) => {
         // 更新位置
-        const angle = Math.PI / 2 * t / rotateTime;
+        const angle = ((Math.PI / 2) * t) / rotateTime;
         // 计算在该角度下小人占据的长度
         const distance = Math.sin(angle) * LITTLE_MAN_HEIGHT + LITTLE_MAN_WIDTH;
 
@@ -579,17 +607,20 @@ class LittleMan {
         }
 
         // 根据当前前进方向和倾倒的位置，判断小人旋转的方向
-        if (direction === 'x') {
-          if (state === LittleMan.STATE.next_edge_front ||
-              state === LittleMan.STATE.current_edge_front) {
+        if (direction === "x") {
+          if (
+            state === LittleMan.STATE.next_edge_front ||
+            state === LittleMan.STATE.current_edge_front
+          ) {
             this.body.rotateZ(lastAngle - angle);
           } else {
             this.body.rotateZ(angle - lastAngle);
           }
         } else {
-
-          if (state === LittleMan.STATE.next_edge_front ||
-            state === LittleMan.STATE.current_edge_front) {
+          if (
+            state === LittleMan.STATE.next_edge_front ||
+            state === LittleMan.STATE.current_edge_front
+          ) {
             this.body.rotateX(lastAngle - angle);
           } else {
             this.body.rotateX(angle - lastAngle);
@@ -597,53 +628,55 @@ class LittleMan {
         }
 
         lastAngle = angle;
-      }).start();
-
+      })
+      .start();
 
     let slideXZ = null;
     // 向外滑出一定的距离
-    const slideTime = JUMP_TIME/2;
+    const slideTime = JUMP_TIME / 2;
 
-    if (direction === 'x') {
+    if (direction === "x") {
       let xTarget;
       if (state === LittleMan.STATE.current_edge_front) {
-        xTarget = currentPosition.x + currentSize/2 + LITTLE_MAN_WIDTH/2 + 0.2;
+        xTarget =
+          currentPosition.x + currentSize / 2 + LITTLE_MAN_WIDTH / 2 + 0.2;
       } else if (state === LittleMan.STATE.next_edge_back) {
-        xTarget = nextPosition.x - nextSize/2 - LITTLE_MAN_WIDTH/2 - 0.2;
+        xTarget = nextPosition.x - nextSize / 2 - LITTLE_MAN_WIDTH / 2 - 0.2;
       } else if (state === LittleMan.STATE.next_edge_front) {
-        xTarget = nextPosition.x + nextSize/2 + LITTLE_MAN_WIDTH/2 + 0.2;
+        xTarget = nextPosition.x + nextSize / 2 + LITTLE_MAN_WIDTH / 2 + 0.2;
       }
 
-      slideXZ = new TWEEN.Tween({x: this.body.position.x,})
-        .to({x: xTarget}, slideTime)
+      slideXZ = new TWEEN.Tween({ x: this.body.position.x })
+        .to({ x: xTarget }, slideTime)
         .easing(TWEEN.Easing.Linear.None)
-        .onUpdate(({x})=>{
+        .onUpdate(({ x }) => {
           this.body.position.setX(x);
-        })
+        });
     } else {
       let zTarget;
       if (state === LittleMan.STATE.current_edge_front) {
-        zTarget = currentPosition.z - currentSize/2 - LITTLE_MAN_WIDTH/2 - 0.2;
+        zTarget =
+          currentPosition.z - currentSize / 2 - LITTLE_MAN_WIDTH / 2 - 0.2;
       } else if (state === LittleMan.STATE.next_edge_back) {
-        zTarget = nextPosition.z + nextSize/2 + LITTLE_MAN_WIDTH/2 + 0.2;
+        zTarget = nextPosition.z + nextSize / 2 + LITTLE_MAN_WIDTH / 2 + 0.2;
       } else if (state === LittleMan.STATE.next_edge_front) {
-        zTarget = nextPosition.z - nextSize/2 - LITTLE_MAN_WIDTH/2 - 0.2;
+        zTarget = nextPosition.z - nextSize / 2 - LITTLE_MAN_WIDTH / 2 - 0.2;
       }
 
-      slideXZ = new TWEEN.Tween({z: this.body.position.z})
-        .to({z: zTarget,}, slideTime)
+      slideXZ = new TWEEN.Tween({ z: this.body.position.z })
+        .to({ z: zTarget }, slideTime)
         .easing(TWEEN.Easing.Linear.None)
-        .onUpdate(({z})=>{
+        .onUpdate(({ z }) => {
           this.body.position.setZ(z);
-        })
+        });
     }
 
     // 滑动之后，整体下落
     const fallTime = rotateTime - slideTime;
-    const fallDown = new TWEEN.Tween({y: this.body.position.y})
-      .to({y: LITTLE_MAN_WIDTH/2,}, fallTime)
+    const fallDown = new TWEEN.Tween({ y: this.body.position.y })
+      .to({ y: LITTLE_MAN_WIDTH / 2 }, fallTime)
       .easing(TWEEN.Easing.Quintic.Out)
-      .onUpdate(({y})=>{
+      .onUpdate(({ y }) => {
         this.body.position.setY(y);
       });
 
@@ -654,7 +687,7 @@ class LittleMan {
 
   // 更新位置
   updatePosition(position) {
-    const {x, y, z} = position;
+    const { x, y, z } = position;
 
     this.body.position.set(x, y, z);
   }
@@ -663,28 +696,27 @@ class LittleMan {
   enterStage(stage) {
     stage.scene.add(this.body);
   }
-
 }
 
 LittleMan.STATE = {
   // 初始
   init: 1,
   // 蓄力
-  storage: 1<<1,
+  storage: 1 << 1,
   // 跳跃
-  jumping: 1<<2,
+  jumping: 1 << 2,
   // 当前盒子
-  stay: 1<<3,
+  stay: 1 << 3,
   // 下个盒子
-  nextBox: 1<<4,
+  nextBox: 1 << 4,
   // 出界
-  outRange: 1<<5,
+  outRange: 1 << 5,
   // 当前盒子边缘前向掉落
-  current_edge_front: 1<<6,
+  current_edge_front: 1 << 6,
   // 下一个盒子边缘后向掉落
-  next_edge_back: 1<<7,
+  next_edge_back: 1 << 7,
   // 下一个盒子边缘前向掉落
-  next_edge_front: 1<<8
+  next_edge_front: 1 << 8,
 };
 
 export default LittleMan;

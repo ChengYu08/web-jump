@@ -17,12 +17,14 @@ const ENABLE_AUTO_JUMP = false;
 const ENABLE_DISPOSE_BOX = true;
 
 // 背景色
-const BACKGROUND_COLOR = 0xD6DBDF;
+const BACKGROUND_COLOR = 0xd6dbdf;
 
 // 白光
-const LIGHT_COLOR = 0xFFFFFF;
+const LIGHT_COLOR = 0xffffff;
 // 盒子
-const BOX_COLORS = [0Xfa541c, 0xfaad14, 0x13c2c2, 0x1890ff, 0x722ed1, 0xFFFFFF, 0xa0d911];
+const BOX_COLORS = [
+  0xfa541c, 0xfaad14, 0x13c2c2, 0x1890ff, 0x722ed1, 0xffffff, 0xa0d911,
+];
 
 // 基础宽度
 // 为了方便计算，任何大小的屏幕下，宽度都是基础宽
@@ -30,26 +32,26 @@ const BASE_WIDTH = 100;
 
 // canvas 大小
 const CLIENT_HEIGHT = window.innerHeight;
-const CLIENT_WIDTH = CLIENT_HEIGHT * 3 / 5;
+const CLIENT_WIDTH = (CLIENT_HEIGHT * 3) / 5;
 
 // 视图的宽高
 const WIDTH = BASE_WIDTH;
-const HEIGHT = CLIENT_HEIGHT /CLIENT_WIDTH * BASE_WIDTH;
+const HEIGHT = (CLIENT_HEIGHT / CLIENT_WIDTH) * BASE_WIDTH;
 // 远近值取宽高中大的那个
-const FAR = WIDTH > HEIGHT ? WIDTH: HEIGHT;
+const FAR = WIDTH > HEIGHT ? WIDTH : HEIGHT;
 
 // 盒子大小
-const BLOCK_MAX_SIZE = WIDTH > HEIGHT ? HEIGHT/3 : WIDTH/3;
-const BLOCK_MIN_SIZE = WIDTH > HEIGHT ? HEIGHT/8 : WIDTH/8;
+const BLOCK_MAX_SIZE = WIDTH > HEIGHT ? HEIGHT / 3 : WIDTH / 3;
+const BLOCK_MIN_SIZE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
 
 // 两个盒子之间距离
-const BLOCK_MAX_DISTANCE = WIDTH > HEIGHT ? HEIGHT/2 : WIDTH/2;
-const BLOCK_MIN_DISTANCE = WIDTH > HEIGHT ? HEIGHT/8 : WIDTH/8;
+const BLOCK_MAX_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 2 : WIDTH / 2;
+const BLOCK_MIN_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
 
 // 小人的大小，颜色
-const LITTLE_MAN_WIDTH = BLOCK_MIN_SIZE/2.3;
+const LITTLE_MAN_WIDTH = BLOCK_MIN_SIZE / 2.3;
 const LITTLE_MAN_HEIGHT = LITTLE_MAN_WIDTH * 3.5;
-const LITTLE_MAN_COLOR = '#f5222d';
+const LITTLE_MAN_COLOR = "#10B130";
 
 // 最大蓄力时间
 const STORAGE_TIME = 1500;
@@ -57,16 +59,14 @@ const STORAGE_TIME = 1500;
 // 跳跃滞空 ms 数
 const JUMP_TIME = 350;
 // 跳跃的高度
-const HIGH_JUMP = WIDTH > HEIGHT ? HEIGHT/3.5 : WIDTH/3.5;
-
+const HIGH_JUMP = WIDTH > HEIGHT ? HEIGHT / 3.5 : WIDTH / 3.5;
 
 // 粒子数量
-const PARTICLE_NUM = 2 * 8;
+const PARTICLE_NUM = 2 * 8 * 5;
 // 粒子最小距离
-const PARTICLE_MIN_DISTANCE = LITTLE_MAN_WIDTH/2;
+const PARTICLE_MIN_DISTANCE = LITTLE_MAN_WIDTH / 2;
 // 粒子最大距离
-const PARTICLE_MAX_DISTANCE = LITTLE_MAN_HEIGHT/1.5;
-
+const PARTICLE_MAX_DISTANCE = LITTLE_MAN_HEIGHT / 1.5;
 
 // 拖尾碎片宽度,表示精度
 const TAIL_WIDTH = 1;
@@ -105,5 +105,5 @@ export {
   TAIL_WIDTH,
   TAIL_HEIGHT,
   TAIL_DURATION,
-  ENABLE_AUTO_JUMP
-}
+  ENABLE_AUTO_JUMP,
+};

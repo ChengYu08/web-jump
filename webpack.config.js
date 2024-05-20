@@ -36,5 +36,10 @@ module.exports = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ title: "跳一跳" })],
+  plugins: [
+    new HtmlWebpackPlugin({ title: "跳一跳", template: "./index.html" }),
+  ],
+  // externals: {
+  //   callAppMethod: "callAppMethod",
+  // },
 };
