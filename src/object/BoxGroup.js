@@ -1,34 +1,95 @@
-import {
-  Group
-} from 'three';
-import TWEEN from '@tweenjs/tween.js';
-import CubeBox from './CubeBox';
-import CylinderBox from './CylinderBox';
-import ExpressBox from './ExpressBox';
-import MagicCubeBox from './MagicCubeBox';
-import {animateFrame} from '../util/TweenUtil';
-import {FAR, ENABLE_DISPOSE_BOX} from "../config/constant";
+import { Group } from "three";
+import TWEEN from "@tweenjs/tween.js";
+import CubeBox from "./CubeBox";
+// import CylinderBox from "./CylinderBox";
+// import ExpressBox from "./ExpressBox";
+import EarthSphere from "./EarthSphere";
+import MagicCubeBox from "./MagicCubeBox";
+import { animateFrame } from "../util/TweenUtil";
+import { FAR, ENABLE_DISPOSE_BOX } from "../config/constant";
 
-const BoxList = [{
-  index: 0,
-  box: CubeBox,
-  isStatic: false
-}, {
-  index: 1,
-  box: CylinderBox,
-  isStatic: false
-},{
-  index: 2,
-  box: ExpressBox,
-  isStatic: true
-},{
-  index: 3,
-  box: MagicCubeBox,
-  isStatic: true
-}];
+import JupiterSphere from "./JupiterSphere";
+import MarsSphere from "./MarsSphere";
+import MercurySphere from "./MercurySphere";
+import MoldsSphere from "./MoldsSphere";
+import NeptuneSphere from "./NeptuneSphere";
+import SaturnSphere from "./SaturnSphere";
+import UranusSphere from "./UranusSphere";
+import VenusSphere from "./VenusSphere";
+
+// const BoxList = [
+//   {
+//     index: 0,
+//     box: CubeBox,
+//     isStatic: false,
+//   },
+//   {
+//     index: 1,
+//     box: CylinderBox,
+//     isStatic: false,
+//   },
+//   {
+//     index: 2,
+//     box: ExpressBox,
+//     isStatic: true,
+//   },
+//   {
+//     index: 3,
+//     box: MagicCubeBox,
+//     isStatic: true,
+//   },
+// ];
+
+const BoxList = [
+  {
+    index: 0,
+    box: EarthSphere,
+    isStatic: true,
+  },
+  {
+    index: 1,
+    box: JupiterSphere,
+    isStatic: true,
+  },
+  {
+    index: 2,
+    box: MarsSphere,
+    isStatic: true,
+  },
+  {
+    index: 3,
+    box: MercurySphere,
+    isStatic: true,
+  },
+
+  {
+    index: 4,
+    box: MoldsSphere,
+    isStatic: true,
+  },
+  {
+    index: 5,
+    box: NeptuneSphere,
+    isStatic: true,
+  },
+  {
+    index: 6,
+    box: SaturnSphere,
+    isStatic: true,
+  },
+  {
+    index: 7,
+    box: UranusSphere,
+    isStatic: true,
+  },
+  {
+    index: 8,
+    box: VenusSphere,
+    isStatic: true,
+  },
+];
 
 export default class BoxGroup {
-
   constructor() {
     // 最后一个盒子
     this.last = null;
@@ -39,8 +100,8 @@ export default class BoxGroup {
     // 存放盒子的缓存
     this.boxInstance = {};
 
-    this.boxInstance[2] = new ExpressBox(null).mesh;
-    this.boxInstance[3] = new MagicCubeBox(null).mesh;
+    this.boxInstance[2] = new EarthSphere(null).mesh;
+    this.boxInstance[3] = new CubeBox(null).mesh;
   }
 
   getBoxInstance(index) {
@@ -80,9 +141,7 @@ export default class BoxGroup {
   }
 
   // 更新位置
-  updatePosition({
-    duration,
-  }) {
+  updatePosition({ duration }) {
     // 找到最后两个盒子的中点
     const last = this.last;
     const secondOfLast = last.prev;
@@ -94,16 +153,16 @@ export default class BoxGroup {
 
     // 先记录下小人最终的目的地，因为可能在盒子未移动完成之前，小人点击了跳跃
     if (this.littleMan) {
-      const {x, z} = this.littleMan.body.position;
+      const { x, z } = this.littleMan.body.position;
       this.littleMan.body.finalX = x - centerX;
       this.littleMan.body.finalZ = z - centerZ;
     }
 
     // 配置动画参数并开始
-    new TWEEN.Tween({x: 0,z: 0})
-      .to({x: centerX, z: centerZ }, duration)
+    new TWEEN.Tween({ x: 0, z: 0 })
+      .to({ x: centerX, z: centerZ }, duration)
       .easing(TWEEN.Easing.Quadratic.Out)
-      .onUpdate(({x,z})=>{
+      .onUpdate(({ x, z }) => {
         const deltaX = x - lastX;
         const deltaZ = z - lastZ;
 
@@ -125,11 +184,11 @@ export default class BoxGroup {
     let tail = this.last;
     const boxToDisPose = [];
 
-    while(tail) {
-      const {x, z} = tail.position;
+    while (tail) {
+      const { x, z } = tail.position;
       const position = {
         x: x - deltaX,
-        z: z - deltaZ
+        z: z - deltaZ,
       };
 
       if (ENABLE_DISPOSE_BOX) {
@@ -177,5 +236,4 @@ export default class BoxGroup {
   setLittleMan(littleMan) {
     this.littleMan = littleMan;
   }
-
 }

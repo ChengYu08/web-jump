@@ -14,7 +14,7 @@ import TWEEN from "@tweenjs/tween.js";
 // import box_top from "../res/box_top.png";
 // import box_middle from "../res/box_middle.png";
 // import box_bottom from "../res/box_bottom.png";
-import { box_bottom, box_middle, box_top } from "../res/dataUrl";
+// import { box_bottom, box_middle, box_top } from "../res/dataUrl";
 export default class MagicCubeBox extends Box {
   constructor(prev) {
     super(prev);

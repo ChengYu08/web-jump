@@ -9,6 +9,10 @@ module.exports = {
     // filename: '[name].[hash].js'
     filename: "[name].js",
   },
+  performance: {
+    hints: false, // 关闭性能提示
+  },
+
   mode: "development",
   target: "web",
   // devtool: "source-map",

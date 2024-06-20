@@ -72,7 +72,8 @@ class LittleMan {
     // 初始化拖尾
     this.initTail();
     // 初始化事件监听
-    this.initEventListener();
+    // this.initEventListener();
+    this.initCustomerEventListener();
   }
 
   // 头部
@@ -156,6 +157,36 @@ class LittleMan {
   // 尾巴展示跳跃过程中的残影
   initTail() {
     this.tail = new Tail(this.stage.scene, this.bodyRotate);
+  }
+
+  initCustomerEventListener() {
+    document.addEventListener("onLongPressDown", (event) => {
+      window.callAppMethod("onLongPressDown", {
+        status: this.state === LittleMan.STATE.init,
+      });
+      // 开始蓄力
+      if (this.state === LittleMan.STATE.init) {
+        this.state = LittleMan.STATE.storage;
+        // 粒子聚集
+        this.particle.gather(this.body);
+        // 形变
+        this.storage();
+      }
+    });
+    document.addEventListener("onLongPressUp", (event) => {
+      event.preventDefault();
+      window.callAppMethod("onLongPressUp", {
+        status: this.state === LittleMan.STATE.storage,
+      });
+      if (this.state === LittleMan.STATE.storage) {
+        this.state = LittleMan.STATE.jumping;
+        // 停止粒子聚集
+        this.particle.stopGather();
+
+        // 跳跃
+        this.jump();
+      }
+    });
   }
 
   initEventListener() {
