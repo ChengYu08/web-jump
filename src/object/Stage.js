@@ -12,8 +12,8 @@ import {
   BoxHelper,
   Vector2,
   Points,
-  Vector3,
-  Geometry,
+  BufferGeometry,
+  BufferAttribute,
   PointsMaterial,
 } from "three";
 
@@ -81,7 +81,7 @@ export default class Stage {
   createScene() {
     this.scene = new Scene();
     this.scene.updateMatrixWorld(true);
-    // this.scene.background = new Color(BACKGROUND_COLOR);
+    this.scene.background = new Color(BACKGROUND_COLOR);
 
     if (DEV) {
       // 坐标辅助线
@@ -112,18 +112,48 @@ export default class Stage {
     }
 
     // 创建星空背景
-    const geometry2 = new Geometry();
-    const material2 = new PointsMaterial({ color: 0xffffff, size: 0.5 });
+    const geometry2 = new BufferGeometry();
+
+    // 使用Float32Array来存储星星的位置、颜色和大小信息
+    const vertices = [];
+    const colors = [];
+    const sizes = [];
 
     // 假设我们创建1000颗星星
-    for (let i = 0; i < 1000; i++) {
-      const star = new Vector3(
-        Math.random() * 200 - 100, // x位置随机
-        Math.random() * 200 - 100, // y位置随机
-        Math.random() * 200 - 100 // z位置随机
+    for (let i = 0; i < 500; i++) {
+      // x, y, z位置随机
+      vertices.push(
+        Math.random() * 200 - 100,
+        Math.random() * 200 - 100,
+        Math.random() * 200 - 100
       );
-      geometry2.vertices.push(star);
+
+      colors.push(255, 255, 255);
+
+      // 随机大小，范围可以自定义
+      sizes.push(Math.random() * 0.1 + Math.random() * 0.8);
     }
+
+    geometry2.setAttribute(
+      "position",
+      new BufferAttribute(new Float32Array(vertices), 3)
+    );
+    geometry2.setAttribute(
+      "color",
+      new BufferAttribute(new Float32Array(colors), 3)
+    );
+    geometry2.setAttribute(
+      "size",
+      new BufferAttribute(new Float32Array(sizes), 1)
+    );
+
+    // 使用PointsMaterial并开启vertexColors属性以使用顶点颜色
+    const material2 = new PointsMaterial({
+      vertexColors: true,
+      sizeAttenuation: true, // 根据距离相机的距离调整大小
+      transparent: true,
+      opacity: 1,
+    });
 
     const stars = new Points(geometry2, material2);
     this.plane.add(stars);

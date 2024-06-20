@@ -17,13 +17,13 @@ const ENABLE_AUTO_JUMP = false;
 const ENABLE_DISPOSE_BOX = true;
 
 // 背景色
-const BACKGROUND_COLOR = 0xd6dbdf;
+const BACKGROUND_COLOR = 0x262334;
 
 // 白光
 const LIGHT_COLOR = 0xffffff;
 // 盒子
 const BOX_COLORS = [
-  0xfa541c, 0xfaad14, 0x13c2c2, 0x1890ff, 0x722ed1, 0xffffff, 0xa0d911,
+  0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
 ];
 
 // 基础宽度
@@ -41,7 +41,7 @@ const HEIGHT = (CLIENT_HEIGHT / CLIENT_WIDTH) * BASE_WIDTH;
 const FAR = WIDTH > HEIGHT ? WIDTH : HEIGHT;
 
 // 盒子大小
-const BLOCK_MAX_SIZE = WIDTH > HEIGHT ? HEIGHT / 3 : WIDTH / 3;
+const BLOCK_MAX_SIZE = WIDTH > HEIGHT ? HEIGHT / 4 : WIDTH / 4;
 const BLOCK_MIN_SIZE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
 
 // 两个盒子之间距离
