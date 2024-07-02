@@ -7,6 +7,7 @@ import {
 import { mars } from "../res/dataUrl";
 import Box from "./Box";
 export default class MarsSphere extends Box {
+  name = "MarsSphere";
   constructor(prev) {
     // 在这里初始化您的构造逻辑，如果有需要的话
     super(prev);

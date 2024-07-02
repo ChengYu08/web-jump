@@ -4,6 +4,7 @@ import { recreateCubeUV, LEFT, TOP, BEHIND } from "../util/MapUtil";
 import { molds } from "../res/dataUrl";
 
 export default class MoldsSphere extends Box {
+  name = "MoldsSphere";
   constructor(prev) {
     super(prev);
   }

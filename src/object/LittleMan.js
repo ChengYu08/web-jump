@@ -71,6 +71,7 @@ class LittleMan {
     this.initPosition();
     // 初始化拖尾
     this.initTail();
+    // TODO 是否是debug 浏览器使用下面这个
     // 初始化事件监听
     // this.initEventListener();
     this.initCustomerEventListener();
@@ -333,13 +334,22 @@ class LittleMan {
       // 移动位置
       // duration 的大小要小于小人的滞空时间
       this.boxGroup.updatePosition({ duration: 300 });
-      window.callAppMethod("jumpSuccess", {});
+      window.callAppMethod("jumpSuccess", {
+        curTarget: last.prev["name"],
+        nextTarget: last["name"],
+        // 是否是礼盒
+        isMold: last.prev["name"] === "MoldsSphere",
+      });
     }
 
     // 跳到了空地（游戏结束）
     if (state === LittleMan.STATE.outRange) {
       this.landToGround();
-      window.callAppMethod("gameOver", {});
+      window.callAppMethod("gameOver", {
+        curTarget: this.box["name"],
+        // 是否是礼盒
+        isMold: this.box["name"] === "MoldsSphere",
+      });
     }
 
     // 前向掉落,后向掉落（游戏结束）
@@ -349,7 +359,11 @@ class LittleMan {
       state === LittleMan.STATE.next_edge_back
     ) {
       this.leaning(state);
-      window.callAppMethod("gameOver", {});
+      window.callAppMethod("gameOver", {
+        curTarget: this.box["name"],
+        // 是否是礼盒
+        isMold: this.box["name"] === "MoldsSphere",
+      });
     }
   }
 

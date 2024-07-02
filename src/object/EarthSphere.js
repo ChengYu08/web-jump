@@ -7,6 +7,8 @@ import {
 import { earth } from "../res/dataUrl";
 import Box from "./Box";
 export default class EarthSphere extends Box {
+  name = "EarthSphere";
+
   constructor(prev) {
     // 在这里初始化您的构造逻辑，如果有需要的话
     super(prev);
