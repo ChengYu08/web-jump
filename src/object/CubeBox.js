@@ -13,7 +13,9 @@ export default class CubeBox extends Box {
       this.height / 2.5,
       this.size
     );
-    const material = new MeshLambertMaterial({ color: this.color });
+    const material = new MeshLambertMaterial({
+      color: this.color,
+    });
 
     geometry.translate(0, this.height / 2, 0);
     this.mesh = new Mesh(geometry, material);

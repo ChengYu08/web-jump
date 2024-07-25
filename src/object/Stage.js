@@ -65,7 +65,7 @@ export default class Stage {
     // 初始化渲染器
     this.createRenderer();
     // 初始化地面
-    this.createPlane();
+    // this.createPlane();
     // 初始化光照
     this.createLight();
     // 初始化相机
@@ -162,41 +162,29 @@ export default class Stage {
 
   // 光源
   createLight() {
-    // // 环境光会均匀的照亮场景中的所有物体，它不能用来投射阴影，因为它没有方向
-    // const ambientLight = new AmbientLight(LIGHT_COLOR, 0.5);
-
-    // // 平行光，平行光可以投射阴影
-    // this.shadowLight = new DirectionalLight(LIGHT_COLOR, 0.5);
-    // // 设定光照源方向，目标默认是原点
-    // // 这个大小无意义，只代表方向
-    // this.shadowLight.position.set(FAR / 6, FAR / 2, FAR / 6);
-    // // 开启阴影投射
-    // this.shadowLight.castShadow = false;
-
-    // // 定义可见域的投射阴影
-    // this.shadowLight.shadow.camera = new OrthographicCamera(
-    //   -WIDTH * 1.5,
-    //   WIDTH * 1.5,
-    //   HEIGHT,
-    //   -HEIGHT,
-    //   0,
-    //   2 * FAR
-    // );
-    // this.shadowLight.shadow.mapSize = new Vector2(1024, 1024);
-
-    // this.scene.add(ambientLight);
-    // this.scene.add(this.shadowLight);
-
-    // 环境光
+    // 环境光会均匀的照亮场景中的所有物体，它不能用来投射阴影，因为它没有方向
     const ambientLight = new AmbientLight(LIGHT_COLOR, 0.5);
-    this.scene.add(ambientLight);
 
-    // 平行光（修改光源位置至正上方）
+    // 平行光，平行光可以投射阴影
     this.shadowLight = new DirectionalLight(LIGHT_COLOR, 0.5);
-    // 将光源位置设置在正上方，远离场景中心，确保光线自上而下
-    this.shadowLight.position.set(0, FAR * 7, 0); // 示例中使用了FAR的7倍作为y坐标
-    this.shadowLight.castShadow = false; // 根据需要调整是否开启阴影投射
+    // 设定光照源方向，目标默认是原点
+    // 这个大小无意义，只代表方向
+    this.shadowLight.position.set(FAR / 6, FAR / 2, FAR / 6);
+    // 开启阴影投射
+    this.shadowLight.castShadow = true;
 
+    // 定义可见域的投射阴影
+    this.shadowLight.shadow.camera = new OrthographicCamera(
+      -WIDTH * 1.5,
+      WIDTH * 1.5,
+      HEIGHT,
+      -HEIGHT,
+      0,
+      2 * FAR
+    );
+    this.shadowLight.shadow.mapSize = new Vector2(1024, 1024);
+
+    this.scene.add(ambientLight);
     this.scene.add(this.shadowLight);
   }
 
@@ -254,11 +242,10 @@ export default class Stage {
     this.renderer.shadowMap.enabled = true;
     // 设置设备像素
     this.renderer.setPixelRatio(window.devicePixelRatio);
-
-    if (ENABLE_IMAGE_POST_PROCESS) {
-      // 开启特效
-      this.composer = new EffectComposer(this.renderer);
-    }
+    // 开启特效
+    this.composer = new EffectComposer(this.renderer);
+    // if (ENABLE_IMAGE_POST_PROCESS) {
+    // }
   }
 
   // 执行渲染

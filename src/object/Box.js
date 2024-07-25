@@ -5,11 +5,10 @@ import {
   BLOCK_MAX_DISTANCE,
   BLOCK_MIN_DISTANCE,
 } from "../config/constant";
-import TWEEN from '@tweenjs/tween.js';
-import {animateFrame} from "../util/TweenUtil";
+import TWEEN from "@tweenjs/tween.js";
+import { animateFrame } from "../util/TweenUtil";
 
 class Box {
-
   constructor(prev, cloneMesh) {
     // 构造一个链表结构，方便后续盒子的增加和销毁
     // 上一个盒子
@@ -33,7 +32,7 @@ class Box {
     this.position = {
       x: null,
       y: null,
-      z: null
+      z: null,
     };
     // 盒子网格
     this.mesh = null;
@@ -79,7 +78,8 @@ class Box {
       return;
     }
 
-    this.size = Math.random() * (BLOCK_MAX_SIZE - BLOCK_MIN_SIZE) + BLOCK_MIN_SIZE;
+    this.size =
+      Math.random() * (BLOCK_MAX_SIZE - BLOCK_MIN_SIZE) + BLOCK_MIN_SIZE;
   }
 
   // 从备选的颜色中随机一个
@@ -93,15 +93,15 @@ class Box {
   initDirection() {
     // 如果是第一个盒子，下一个一定是 x 方向
     if (!this.prev) {
-      this.direction = 'x'
+      this.direction = "x";
     } else {
       // 随机 x 或 z 方向
       const isX = Math.round(Math.random()) === 0;
 
       if (isX) {
-        this.direction = 'x'
+        this.direction = "x";
       } else {
-        this.direction = 'z'
+        this.direction = "z";
       }
     }
   }
@@ -113,7 +113,10 @@ class Box {
       this.distance = 0.5 * (BLOCK_MAX_DISTANCE + BLOCK_MIN_SIZE);
     } else {
       // 随机距离
-      this.distance = Math.round(BLOCK_MIN_DISTANCE + Math.random() * (BLOCK_MAX_DISTANCE - BLOCK_MIN_SIZE));
+      this.distance = Math.round(
+        BLOCK_MIN_DISTANCE +
+          Math.random() * (BLOCK_MAX_DISTANCE - BLOCK_MIN_SIZE)
+      );
     }
   }
 
@@ -123,7 +126,7 @@ class Box {
     this.position = {
       x: 0,
       y: 0,
-      z: 0
+      z: 0,
     };
 
     // 第1个盒子使用默认位置
@@ -132,14 +135,19 @@ class Box {
     }
 
     // 盒子向 X 或 Z 轴方向移动
-    const { size: prevSize, position: prevPosition, direction, distance } = this.prev;
+    const {
+      size: prevSize,
+      position: prevPosition,
+      direction,
+      distance,
+    } = this.prev;
     const { x, z } = prevPosition;
 
-    if (direction === 'x') {
-      this.position.x = x + prevSize/2 + distance + this.size / 2;
+    if (direction === "x") {
+      this.position.x = x + prevSize / 2 + distance + this.size / 2;
       this.position.z = z;
     } else {
-      this.position.z = z - prevSize/2 - distance - this.size / 2;
+      this.position.z = z - prevSize / 2 - distance - this.size / 2;
       this.position.x = x;
     }
   }
@@ -147,7 +155,7 @@ class Box {
   initBox() {}
 
   configBox() {
-    const {x, y, z} = this.position;
+    const { x, y, z } = this.position;
     // 阴影贴图
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
@@ -162,9 +170,10 @@ class Box {
       this.mesh.position.set(x, y, z);
     } else {
       // 盒子的入场动画
-      new TWEEN.Tween({y: 10}).to({y: 0}, 400)
+      new TWEEN.Tween({ y: 10 })
+        .to({ y: 0 }, 400)
         .easing(TWEEN.Easing.Bounce.Out)
-        .onUpdate(({ y })=>{
+        .onUpdate(({ y }) => {
           this.mesh.position.setY(y);
         })
         .start();
@@ -175,7 +184,7 @@ class Box {
 
   // 更新盒子位置
   updatePosition(position) {
-    const {x, y, z} = position;
+    const { x, y, z } = position;
 
     this.position = position;
     this.mesh.position.set(x, y, z);
@@ -183,7 +192,7 @@ class Box {
 
   // 只更新 X 和 Z 的位置
   updateXZPosition(position) {
-    const {x, z} = position;
+    const { x, z } = position;
 
     this.position.x = position.x;
     this.position.z = position.z;
@@ -202,6 +211,6 @@ class Box {
 }
 
 // 默认的高度
-Box.defaultHeight = BLOCK_MAX_SIZE/2;
+Box.defaultHeight = BLOCK_MAX_SIZE / 2;
 
 export default Box;

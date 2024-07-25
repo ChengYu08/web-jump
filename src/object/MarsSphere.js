@@ -14,7 +14,7 @@ export default class MarsSphere extends Box {
   }
 
   initBox() {
-    const radius = 12.5; // 球体半径，您可以根据需要调整
+    const radius = 14; // 球体半径，您可以根据需要调整
     const widthSegments = 32; // 横向分割数量
     const heightSegments = 32; // 纵向分割数量
     const geometry = new SphereGeometry(radius, widthSegments, heightSegments);

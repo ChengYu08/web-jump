@@ -10,11 +10,6 @@ import { recreateCubeUV, LEFT, TOP, BEHIND, RIGHT } from "../util/MapUtil";
 import { animateFrame } from "../util/TweenUtil";
 import TWEEN from "@tweenjs/tween.js";
 // 这里因为本地图片加载不出来，有跨域问题  所以转换成base userSelect:
-
-// import box_top from "../res/box_top.png";
-// import box_middle from "../res/box_middle.png";
-// import box_bottom from "../res/box_bottom.png";
-// import { box_bottom, box_middle, box_top } from "../res/dataUrl";
 export default class MagicCubeBox extends Box {
   constructor(prev) {
     super(prev);

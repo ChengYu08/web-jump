@@ -22,10 +22,7 @@ const BACKGROUND_COLOR = 0x262334;
 // 白光
 const LIGHT_COLOR = 0xffffff;
 // 盒子
-const BOX_COLORS = [
-  0xff262334, 0xff262334, 0xff262334, 0xff262334, 0xff262334, 0xff262334,
-  0xff262334,
-];
+const BOX_COLORS = [0x514f5d];
 
 // 基础宽度
 // 为了方便计算，任何大小的屏幕下，宽度都是基础宽
@@ -51,8 +48,8 @@ const BLOCK_MIN_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
 
 // 小人的大小，颜色
 const LITTLE_MAN_WIDTH = BLOCK_MIN_SIZE / 2.3;
-const LITTLE_MAN_HEIGHT = LITTLE_MAN_WIDTH * 3.5;
-const LITTLE_MAN_COLOR = "#10B130";
+const LITTLE_MAN_HEIGHT = LITTLE_MAN_WIDTH * 3;
+const LITTLE_MAN_COLOR = "#FFFFFF";
 
 // 最大蓄力时间
 const STORAGE_TIME = 1500;
