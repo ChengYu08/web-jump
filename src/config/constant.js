@@ -22,7 +22,7 @@ const BACKGROUND_COLOR = 0x262334;
 // 白光
 const LIGHT_COLOR = 0xffffff;
 // 盒子
-const BOX_COLORS = [0x514f5d];
+const BOX_COLORS = [0x514f5d, 0x514f5d, 0x514f5d, 0x514f5d];
 
 // 基础宽度
 // 为了方便计算，任何大小的屏幕下，宽度都是基础宽
@@ -44,7 +44,7 @@ const BLOCK_MIN_SIZE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
 
 // 两个盒子之间距离
 const BLOCK_MAX_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 2 : WIDTH / 2;
-const BLOCK_MIN_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 8 : WIDTH / 8;
+const BLOCK_MIN_DISTANCE = WIDTH > HEIGHT ? HEIGHT / 4 : WIDTH / 4;
 
 // 小人的大小，颜色
 const LITTLE_MAN_WIDTH = BLOCK_MIN_SIZE / 2.3;
@@ -60,7 +60,7 @@ const JUMP_TIME = 350;
 const HIGH_JUMP = WIDTH > HEIGHT ? HEIGHT / 3.5 : WIDTH / 3.5;
 
 // 粒子数量
-const PARTICLE_NUM = 2 * 8 * 5;
+const PARTICLE_NUM = 2 * 8 * 2;
 // 粒子最小距离
 const PARTICLE_MIN_DISTANCE = LITTLE_MAN_WIDTH / 2;
 // 粒子最大距离

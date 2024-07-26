@@ -12,18 +12,7 @@ import {
   PointsMaterial,
 } from "three";
 
-import {
-  BACKGROUND_COLOR,
-  DEV,
-  WIDTH,
-  HEIGHT,
-  CLIENT_HEIGHT,
-  CLIENT_WIDTH,
-  FAR,
-  LIGHT_COLOR,
-  ORBIT_CONTROL,
-  ENABLE_IMAGE_POST_PROCESS,
-} from "../config/constant";
+import { FAR } from "../config/constant";
 export default class JumpGame {
   constructor() {
     // 舞台
@@ -99,7 +88,7 @@ export default class JumpGame {
     const sizes = [];
 
     // 假设我们创建1000颗星星
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 300; i++) {
       // x, y, z位置随机
       vertices.push(
         Math.random() * 200 - 100,

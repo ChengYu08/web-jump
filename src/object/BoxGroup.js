@@ -1,10 +1,7 @@
 import { Group } from "three";
 import TWEEN from "@tweenjs/tween.js";
 import CubeBox from "./CubeBox";
-// import CylinderBox from "./CylinderBox";
-// import ExpressBox from "./ExpressBox";
 import EarthSphere from "./EarthSphere";
-import MagicCubeBox from "./MagicCubeBox";
 import { animateFrame } from "../util/TweenUtil";
 import { FAR, ENABLE_DISPOSE_BOX } from "../config/constant";
 
@@ -127,14 +124,20 @@ export default class BoxGroup {
     let box;
 
     if (!this.last || !this.last.prev) {
+      console.log("1", this);
       box = new CubeBox(this.last);
     } else {
-      const index = Math.ceil(Math.random() * BoxList.length - 1);
-
-      box = this.getBoxInstance(index);
+      if (Math.random() * 10 <= 5) {
+        box = new CubeBox(this.last);
+      } else {
+        const index = Math.ceil(Math.random() * BoxList.length - 1);
+        console.log("2", this);
+        box = this.getBoxInstance(index);
+      }
     }
 
     this.group.add(box.mesh);
+    console.log("box", box);
     this.last = box;
 
     return this.last;
