@@ -10,7 +10,8 @@ import {
 import TWEEN from "@tweenjs/tween.js";
 
 // import Dot from "../res/dot.png";
-import { Dot } from "../res/dataUrl";
+// import { Dot } from "../res/dataUrl";
+import Dot from "../images/dot.webp";
 import { animateFrame } from "../util/TweenUtil";
 
 export default class Particle {

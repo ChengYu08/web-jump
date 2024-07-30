@@ -1,7 +1,8 @@
 import Box from "./Box";
 import { BoxGeometry, Mesh, MeshLambertMaterial, TextureLoader } from "three";
 import { recreateCubeUV, LEFT, TOP, BEHIND } from "../util/MapUtil";
-import { molds } from "../res/dataUrl";
+// import { molds } from "../res/dataUrl";
+import molds from "../images/molds.webp";
 
 export default class MoldsSphere extends Box {
   name = "MoldsSphere";

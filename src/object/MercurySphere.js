@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { mercury } from "../res/dataUrl";
+// import { mercury } from "../res/dataUrl";
+import mercury from "../images/mercury.webp";
 import Box from "./Box";
 export default class MercurySphere extends Box {
   name = "MercurySphere";

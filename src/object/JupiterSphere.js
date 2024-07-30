@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { jupiter } from "../res/dataUrl";
+// import { jupiter } from "../res/dataUrl";
+import jupiter from "../images/jupiter.webp";
 import Box from "./Box";
 export default class JupiterSphere extends Box {
   name = "JupiterSphere";

@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { venus } from "../res/dataUrl";
+// import { venus } from "../res/dataUrl";
+import venus from "../images/venus.webp";
 import Box from "./Box";
 export default class VenusSphere extends Box {
   name = "VenusSphere";

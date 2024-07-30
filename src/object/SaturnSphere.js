@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { saturn } from "../res/dataUrl";
+// import { saturn } from "../res/dataUrl";
+import saturn from "../images/saturn.webp";
 import Box from "./Box";
 export default class SaturnSphere extends Box {
   name = "SaturnSphere";

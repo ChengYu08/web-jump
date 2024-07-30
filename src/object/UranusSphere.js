@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { uranus } from "../res/dataUrl";
+// import { uranus } from "../res/dataUrl";
+import uranus from "../images/uranus.webp";
 import Box from "./Box";
 export default class UranusSphere extends Box {
   name = "UranusSphere";

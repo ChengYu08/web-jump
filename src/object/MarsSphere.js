@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { mars } from "../res/dataUrl";
+// import { mars } from "../res/dataUrl";
+import mars from "../images/mars.webp";
 import Box from "./Box";
 export default class MarsSphere extends Box {
   name = "MarsSphere";

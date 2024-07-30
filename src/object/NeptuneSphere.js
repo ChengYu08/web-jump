@@ -4,7 +4,8 @@ import {
   MeshLambertMaterial,
   TextureLoader,
 } from "three";
-import { neptune } from "../res/dataUrl";
+// import { neptune } from "../res/dataUrl";
+import neptune from "../images/neptune.webp";
 import Box from "./Box";
 export default class NeptuneSphere extends Box {
   name = "NeptuneSphere";

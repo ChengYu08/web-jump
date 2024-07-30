@@ -5,7 +5,9 @@ import {
   TextureLoader,
   MeshBasicMaterial,
 } from "three";
-import { earth } from "../res/dataUrl";
+// import { earth } from "../res/dataUrl";
+
+import earth from "../images/earth.webp";
 import Box from "./Box";
 
 // import planetTexture from "../res/earth_cover.png";

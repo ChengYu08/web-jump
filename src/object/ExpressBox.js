@@ -2,7 +2,10 @@ import Box from "./Box";
 import { BoxGeometry, Mesh, MeshLambertMaterial, TextureLoader } from "three";
 import { recreateCubeUV, LEFT, TOP, BEHIND } from "../util/MapUtil";
 // import express from '../res/express.png';
-import { express } from "../res/dataUrl";
+// import { express } from "../res/dataUrl";
+
+// TODO 没有使用了
+import express from "../images/express.webp";
 
 export default class ExpressBox extends Box {
   constructor(prev) {
